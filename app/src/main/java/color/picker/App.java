@@ -17,6 +17,18 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.WebResourceRoot;
 
 public class App {
+    private User appUser;
+    public App(){
+        
+    }
+
+    public User getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(User appUser) {
+        this.appUser = appUser;
+    }
 
     public static void main(String[] args) throws LifecycleException{
         Tomcat server = new Tomcat();
@@ -42,6 +54,7 @@ public class App {
                 }
             });
         context.addServletMappingDecoded("", "colorServlet");
+        App app = new App();
 
         server.addServlet(
             "", 
@@ -54,6 +67,7 @@ public class App {
 
                         //replace with db comparison
                             if (user.equals("admin") && pass.equals("password")){
+                                app.setAppUser(new User(user));
                                 resp.sendRedirect("/colorPicker.html");
                             }
                             else{
@@ -63,15 +77,20 @@ public class App {
             }
         });
         context.addServletMappingDecoded("/login", "loginServlet");
+
+
         server.addServlet(
             "", 
             "saveServlet", 
             new HttpServlet(){
                 @Override
                 protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
-                    System.out.println(req.getParameter("red"));
-                    System.out.println(req.getParameter("user"));
-                    
+                    String colorSave = "rgb(";
+                    colorSave += req.getParameter("red") + ", ";
+                    colorSave += req.getParameter("green")+ ", ";
+                    colorSave += req.getParameter("blue")+ ")";
+                    System.out.println(app.getAppUser().getUsername() + " " + colorSave);
+                    resp.sendRedirect("/colorPicker.html");
             }
         });
         context.addServletMappingDecoded("/save", "saveServlet");
