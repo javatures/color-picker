@@ -5,10 +5,11 @@
 This is Color-Picker, a web application for picking and saving colors!
 
 ## Technologies Used
-
+* Java 8
 * Apache Tomcat
 * HTML5, CSS3, ES6
 * Javax.Servlet
+* Gradle 7.0
 
 ## Features
 
